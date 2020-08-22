@@ -1,0 +1,43 @@
+# [K] (c) 2020
+
+name: UPDATE
+
+on:
+  push:
+    branches:
+      - master
+    paths:
+      - '.github/workflows/master.yml'
+      - 'scripts/**'
+  schedule:
+    - cron: '30 21 * * *'
+
+jobs:
+  create:
+
+    runs-on: ubuntu-latest
+    if: github.repository == 'kongfl888/openwrt-fullconenat'
+    steps:
+
+    - name: Checkout
+      uses: actions/checkout@main
+      with:
+        ref: master
+
+    - name: Set git identity
+      run : |
+        git config --global user.email "kongfl888@outlook.com"
+        git config --global user.name "kongfl888 K"
+    - name: Git Init
+      run:  |
+        git checkout master
+        git clone -b 19.07 --depth=1 https://github.com/Lienol/openwrt.git
+        cp -rf openwrt/package/network/fullconenat ./
+        rm -rf openwrt
+        add ..
+        git commit -m "Update files" || echo ""
+    - name: Push Commits
+      env:
+        DOWNSTREAM_BRANCH: master
+      run:  |
+        git push origin $DOWNSTREAM_BRANCH || echo ""
