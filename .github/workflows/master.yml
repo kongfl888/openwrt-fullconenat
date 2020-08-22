@@ -14,7 +14,6 @@ on:
 
 jobs:
   create:
-
     runs-on: ubuntu-latest
     if: github.repository == 'kongfl888/openwrt-fullconenat'
     steps:
@@ -31,10 +30,10 @@ jobs:
     - name: Git Init
       run:  |
         git checkout master
-        git clone -b 19.07 --depth=1 https://github.com/Lienol/openwrt.git
-        cp -rf openwrt/package/network/fullconenat ./
+        git clone -b dev-19.07 --depth=1 https://github.com/Lienol/openwrt.git
+        cp -rf openwrt/package/network/fullconenat/* ./
         rm -rf openwrt
-        add ..
+        git add .
         git commit -m "Update files" || echo ""
     - name: Push Commits
       env:
